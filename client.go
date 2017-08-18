@@ -18,9 +18,9 @@ import (
 )
 
 var (
-	appkey    string = AppKey
-	appsecret string = AppKey
-	router    string = Router
+	AppKey    string = ""
+	AppSecret string = ""
+	Router    string = ""
 )
 
 //Request 发送API调用请求
@@ -73,18 +73,18 @@ func sign(args url.Values) string {
 	for _, k := range keys {
 		pstr += k + args.Get(k)
 	}
-	sign := md5.Sum([]byte(appsecret + pstr + appsecret))
+	sign := md5.Sum([]byte(AppSecret + pstr + AppSecret))
 	return strings.ToUpper(hex.EncodeToString(sign[:]))
 }
 
 func checkConfig() error {
-	if appkey == "" {
+	if AppKey == "" {
 		return errors.New("AppKey未配置")
 	}
-	if appsecret == "" {
+	if AppSecret == "" {
 		return errors.New("AppSecret未配置")
 	}
-	if router == "" {
+	if Router == "" {
 		return errors.New("Router未配置")
 	}
 	return nil
@@ -96,7 +96,7 @@ func defaultArgs() url.Values {
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	args.Add("timestamp", timestamp)
 	args.Add("format", "json")
-	args.Add("app_key", appkey)
+	args.Add("app_key", AppKey)
 	args.Add("v", "2.0")
 	args.Add("sign_method", "md5")
 	return args
@@ -109,7 +109,7 @@ func genAPIURL(params map[string]string) string {
 	}
 	args.Add("sign", sign(args))
 
-	u, _ := url.Parse(router)
+	u, _ := url.Parse(Router)
 	u.RawQuery = args.Encode()
 	return u.String()
 }

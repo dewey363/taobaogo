@@ -1,11 +1,10 @@
 package taobaogo
 
-
-
 import (
 	"fmt"
-	"taobao-go/config"
 	"testing"
+
+	"github.com/luobosoft/taobao-go/config"
 )
 
 func Test_Request(t *testing.T) {
