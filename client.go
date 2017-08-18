@@ -1,4 +1,4 @@
-package client
+package taobaogo
 
 import (
 	"crypto/md5"
@@ -12,16 +12,15 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"taobao-go/config"
 	"time"
 
 	simplejson "github.com/bitly/go-simplejson"
 )
 
 var (
-	appkey    string = config.AppKey
-	appsecret string = config.AppKey
-	router    string = config.Router
+	appkey    string = AppKey
+	appsecret string = AppKey
+	router    string = Router
 )
 
 //Request 发送API调用请求

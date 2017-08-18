@@ -1,4 +1,6 @@
-package client
+package taobaogo
+
+
 
 import (
 	"fmt"

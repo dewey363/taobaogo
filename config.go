@@ -1,4 +1,4 @@
-package config
+package taobaogo
 
 var (
 	AppKey     string = "test"
