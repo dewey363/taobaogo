@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -24,17 +23,17 @@ var (
 )
 
 //Request 发送API调用请求
-func Request(method string, params map[string]string, formbody io.Reader) (res *simplejson.Json, err error) {
+func Request(method string, params map[string]string) (res *simplejson.Json, err error) {
 	err = checkConfig()
 	if err != nil {
 		return
 	}
-	apiurl := genAPIURL(params)
-	req, err := http.NewRequest(method, apiurl, formbody)
+	params["method"] = method
+	req, err := http.NewRequest("POST", Router, strings.NewReader(mkPostData(params)))
 	if err != nil {
 		return
 	}
-
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
 	httpclient := &http.Client{}
 	httpclient.Timeout = time.Second * 3
 
@@ -102,14 +101,11 @@ func defaultArgs() url.Values {
 	return args
 }
 
-func genAPIURL(params map[string]string) string {
+func mkPostData(params map[string]string) string {
 	args := defaultArgs()
 	for key, val := range params {
 		args.Set(key, val)
 	}
 	args.Add("sign", sign(args))
-
-	u, _ := url.Parse(Router)
-	u.RawQuery = args.Encode()
-	return u.String()
+	return args.Encode()
 }
